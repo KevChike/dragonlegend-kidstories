@@ -4,14 +4,30 @@
  * Super-admin authentication routes
  *
  */
-$this->get('/login', 'AdminLoginController@showLoginForm');
-$this->post('/login', 'AdminLoginController@login');
-$this->post('/logout', 'AdminLoginController@logout');
+Route::get('/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login.form');
 
-$this->get('/password/reset', 'AdminForgotPasswordController@showLinkRequestForm');
-$this->post('/password/email', 'AdminForgotPasswordController@sendResetLinkEmail');
-$this->get('/password/reset/{token}', 'AdminResetPasswordController@showResetForm');
-$this->post('/password/reset', 'AdminResetPasswordController@reset');
+Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login');
+
+Route::post('/logout', 'Auth\AdminLoginController@logout')->name('admin.logout');
+
+Route::get('/register', 'Auth\AdminRegisterController@showRegistrationForm')->name('admin.register');
+
+Route::post('/register', 'Auth\AdminRegisterController@register')->name('admin.post.register');
+
+Route::group( ['middleware' => ['admin']], function() {
+	Route::get('/dashboard', 'AdminDashboardController@index')->name('admin.dashboard');
+	
+});
+
+
+/*
+
+
+
+$this->get('/password/reset', 'Auth\AdminForgotPasswordController@showLinkRequestForm');
+$this->post('/password/email', 'Auth\AdminForgotPasswordController@sendResetLinkEmail');
+$this->get('/password/reset/{token}', 'Auth\AdminResetPasswordController@showResetForm');
+$this->post('/password/reset', 'Auth\AdminResetPasswordController@reset');*/
 
 /**
  * Category routes for superadmin operations

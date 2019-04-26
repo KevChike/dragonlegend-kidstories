@@ -26,10 +26,12 @@ class RouteServiceProvider extends ServiceProvider
     protected $apiNamespace = 'App\Http\Controllers\Api';
 
     /**
-     * Define your route model bindings, pattern filters, etc.
+     * This namespace is applied to the superadmin controller routes.
      *
-     * @return void
+     * @var string
      */
+    protected $adminNamespace = 'App\Http\Controllers\SuperAdmin';
+
     public function boot()
     {
         //
@@ -48,7 +50,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
-        //
+        $this->mapAdminRoutes();
     }
 
     /**
@@ -79,4 +81,20 @@ class RouteServiceProvider extends ServiceProvider
              ->namespace($this->apiNamespace)
              ->group(base_path('routes/api.php'));
     }
+
+    /**
+     * Define the "admin" routes for the application.
+     *
+     * These routes all receive session state, CSRF protection, etc.
+     *
+     * @return void
+     */
+    protected function mapAdminRoutes()
+    {
+        Route::prefix('admin')
+             ->middleware('web')
+             ->namespace($this->adminNamespace)
+             ->group(base_path('routes/admin.php'));
+    }
+
 }
